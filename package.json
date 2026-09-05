@@ -195,7 +195,7 @@
     "@primer/react": "38.19.0",
     "@primer/react-brand": "^0.70.0",
     "accept-language-parser": "^1.5.0",
-    "ajv": "^8.18.0",
+    "ajv": "^8.20.0",
     "ajv-errors": "^3.0.0",
     "ajv-formats": "^3.0.1",
     "azure-kusto-data": "^7.0.4",
