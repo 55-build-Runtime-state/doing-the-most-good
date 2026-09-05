@@ -2,15 +2,11 @@ date: '2026-06-30'
 sections:
   security_fixes:
     - |
-      **HIGH**: Current configurations of the GitHub API access controls could allow an attacker to create issues in any public repository via a u2s token without requiring the underlying installation to have issues write permission. This therefore allows an attacker to impersonate the victim in public repositories by creating issues and commit comments.
-    - |
-      **MEDIUM**: An attacker with site administrator privileges could extract arbitrary data from the instance's database, including user password hashes, by exploiting a blind SQL injection vulnerability in the `dependenciesPrefers` argument of the `dependencyGraphManifests` GraphQL field. This vulnerability affected instances with the dependency graph enabled and was reported via the GitHub Bug Bounty program.
+      **MEDIUM**: An attacker could create issues, issue comments, commit comments, and private vulnerability reports in public repositories they did not have write access to. This was possible by using a user-to-server token against endpoints that validated repository read access but did not validate the required write permission for those operations. GitHub has requested CVE ID [CVE-2026-14340](https://www.cve.org/cverecord?id=CVE-2026-14340) for this vulnerability, which was reported via the [GitHub Bug Bounty](https://bounty.github.com/) program.
     - |
       **MEDIUM**: An attacker could gain unintended access to an organization's runner management by directing a user to authorize an OAuth app whose requested manage_runners:org scope was not displayed on the authorization consent screen. GitHub has requested CVE ID [CVE-2026-9106](https://www.cve.org/cverecord?id=CVE-2026-9106) for this vulnerability, which was reported via the [GitHub Bug Bounty](https://bounty.github.com/) program.
     - |
       **MEDIUM**: An authenticated GHES user could read source code from private repositories they did not have access to by supplying a cross-repository comparison range to the Copilot pull request description diff summary endpoint, which did not verify the user's permission to view the target repository. GitHub has requested CVE ID [CVE-2026-9132](https://www.cve.org/cverecord?id=CVE-2026-9132) for this vulnerability, which was reported via the [GitHub Bug Bounty program](https://bounty.github.com/).
-    - |
-      **MEDIUM**: An attacker who could execute code within a Copilot coding agent session, for example through a malicious dependency or repository setup steps, could use the agent's server-to-server token to create, modify, or delete releases and release assets in that repository via the REST API, exceeding the agent's documented push-only restriction. GitHub has requested CVE ID [CVE-2026-12373](https://www.cve.org/cverecord?id=CVE-2026-12373) for this vulnerability, which was reported via the [GitHub Bug Bounty program](https://bounty.github.com/).
     - |
       **MEDIUM**: An attacker could execute arbitrary JavaScript in a victim's browser on a GitHub Enterprise Server instance by creating a discussion in the Q\&A category with a crafted title that breaks out of the JSON-LD structured-data script block when a comment is marked as the answer. To mitigate this issue, GitHub has updated the rendering of JSON-LD structured data in discussions to properly escape user-controlled input. GitHub has requested CVE ID [CVE-2026-10585](https://www.cve.org/cverecord?id=CVE-2026-10585) for this vulnerability, which was reported via the [GitHub Bug Bounty](https://bounty.github.com/) program.
     - |
@@ -59,9 +55,9 @@ sections:
     - |
       Admin stats REST API endpoints may time out on appliances with many users or repositories. Retrying the request until data is returned is advised.
     - |
-      When following the steps for [Replacing the primary MySQL node](/admin/monitoring-managing-and-updating-your-instance/configuring-clustering/replacing-a-cluster-node#replacing-the-primary-mysql-node), step 14 (running `ghe-cluster-config-apply`) might fail with errors. If this occurs, re-running `ghe-cluster-config-apply` is expected to succeed.
+      When following the steps for [Replacing the primary MySQL node](/admin/monitoring-and-managing-your-instance/configuring-clustering/replacing-a-cluster-node#replacing-the-primary-database-node-mysql-or-mysql-and-mssql), step 14 (running `ghe-cluster-config-apply`) might fail with errors. If this occurs, re-running `ghe-cluster-config-apply` is expected to succeed.
     - |
-      Running a config apply as part of the steps for [Replacing a node in an emergency](/admin/monitoring-managing-and-updating-your-instance/configuring-clustering/replacing-a-cluster-node#replacing-a-node-in-an-emergency) may fail with errors if the node being replaced is still reachable. If this occurs, shutdown the node and repeat the steps.
+      Running a config apply as part of the steps for [Replacing a node in an emergency](/admin/monitoring-and-managing-your-instance/configuring-clustering/replacing-a-cluster-node#replacing-a-node-in-an-emergency) may fail with errors if the node being replaced is still reachable. If this occurs, shutdown the node and repeat the steps.
     - |
       {% data reusables.release-notes.2024-06-possible-frontend-5-minute-outage-during-hotpatch-upgrade %}
     - |
@@ -92,5 +88,3 @@ sections:
       Custom NTP settings are removed during the upgrade process.
     - |
       When applying an enterprise security configuration to all repositories (for example, enabling Secret Scanning or Code Scanning across all repositories), the system immediately enqueues enablement jobs for every organization in the enterprise simultaneously. For enterprises with a large number of repositories, this can result in significant system load and potential performance degradation. If you manage a large enterprise with many organizations and repositories, we recommend applying security configurations at the organization level rather than at the enterprise level in the UI. This allows you to enable security features incrementally and monitor system performance as you roll out changes.
-    - |
-      Administrators upgrading to certain patch releases encountered a "Failed to generate an OIDC token" error during the `Update Servicing Resources` step when GitHub Actions was configured with Google Cloud Storage (GCS) or AWS S3 using OpenID Connect (OIDC) authentication. The upgrade was blocked and could not complete. To work around this issue, administrators could apply a manual patch by running `sudo sed -i.bak 's|ghe-actions-console -s  -c Update-Service|ghe-actions-console -s  --no-blob-creds -c Update-Service|g' /usr/local/bin/ghe-actions-update` followed by `ghe-config-apply`.

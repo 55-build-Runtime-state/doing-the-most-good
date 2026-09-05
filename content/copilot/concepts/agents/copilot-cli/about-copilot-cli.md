@@ -28,7 +28,7 @@ The command-line interface (CLI) for {% data variables.product.prodname_copilot 
 * macOS
 * Windows from within Powershell and [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/about)
 
-For installation instructions, see [AUTOTITLE](/copilot/how-tos/set-up/install-copilot-cli).
+For installation instructions, see [AUTOTITLE](/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli).
 
 ## Modes of use
 
@@ -63,11 +63,11 @@ To use the CLI programmatically, include the `-p` or `--prompt` command-line opt
 > [!CAUTION]
 > If you use an automatic approval option such as `--allow-all-tools`, {% data variables.product.prodname_copilot_short %} has the same access as you do to files on your computer, and can run any shell commands that you can run, without getting your prior approval. See [Security considerations](#security-considerations), later in this article.
 
-## Running in a sandbox with {% data variables.copilot.sandbox %}
+## Running {% data variables.copilot.copilot_cli_short %} commands in a sandbox
 
 {% data reusables.cli.public-preview-sandbox %}
 
-{% data variables.copilot.sandbox_caps %} provides isolated execution environments for {% data variables.copilot.copilot_cli_short %}, both locally and in the cloud. For more information, see [AUTOTITLE](/copilot/concepts/about-cloud-and-local-sandboxes).
+To prevent {% data variables.product.prodname_copilot_short %} from modifying files you don't want it to touch, you can force agents to run commands within a local sandboxed environment. Alternatively, you can run an entire CLI session in an isolated environment in the cloud. For more information, see [AUTOTITLE](/copilot/concepts/about-cloud-and-local-sandboxes).
 
 ### Local sandboxing
 
@@ -80,7 +80,7 @@ You can start a {% data variables.copilot.copilot_cli_short %} session inside an
 To start a cloud-backed session, run:
 
 ```bash copy
-copilot --cloud
+copilot ‑‑cloud
 ```
 
 ## Use cases for {% data variables.copilot.copilot_cli %}
@@ -192,8 +192,8 @@ You can interact with {% data variables.product.prodname_copilot_short %} while 
 You can customize {% data variables.copilot.copilot_cli %} in a number of ways:
 
 * **Custom instructions**: Custom instructions allow you to give {% data variables.product.prodname_copilot_short %} additional context on your project and how to build, test and validate its changes. All custom instruction files now combine instead of using priority-based fallbacks. For more information, see [AUTOTITLE](/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions).
-* **Model Context Protocol (MCP) servers**: MCP servers allow you to give {% data variables.product.prodname_copilot_short %} access to different data sources and tools. For more information, see [AUTOTITLE](/copilot/how-tos/use-copilot-agents/use-copilot-cli#add-an-mcp-server).
-* **{% data variables.copilot.custom_agents_caps_short %}**: {% data variables.copilot.custom_agents_caps_short %} allow you to create different specialized versions of {% data variables.product.prodname_copilot_short %} for different tasks. For example, you could customize {% data variables.product.prodname_copilot_short %} to be an expert frontend engineer following your team's guidelines. {% data variables.copilot.copilot_cli %} includes specialized {% data variables.copilot.custom_agents_short %} that it automatically delegates common tasks to. For more information, see [AUTOTITLE](/copilot/how-tos/use-copilot-agents/use-copilot-cli#use-custom-agents).
+* **Model Context Protocol (MCP) servers**: MCP servers allow you to give {% data variables.product.prodname_copilot_short %} access to different data sources and tools. For more information, see [AUTOTITLE](/copilot/how-tos/copilot-cli/use-copilot-cli/overview#add-an-mcp-server).
+* **{% data variables.copilot.custom_agents_caps_short %}**: {% data variables.copilot.custom_agents_caps_short %} allow you to create different specialized versions of {% data variables.product.prodname_copilot_short %} for different tasks. For example, you could customize {% data variables.product.prodname_copilot_short %} to be an expert frontend engineer following your team's guidelines. {% data variables.copilot.copilot_cli %} includes specialized {% data variables.copilot.custom_agents_short %} that it automatically delegates common tasks to. For more information, see [AUTOTITLE](/copilot/how-tos/copilot-cli/use-copilot-cli/overview#use-custom-agents).
 * **Hooks**: Hooks allow you to execute custom shell commands at key points during agent execution, enabling you to add validation, logging, security scanning, or workflow automation. See [AUTOTITLE](/copilot/concepts/agents/hooks).
 * **Skills**: Skills allow you to enhance the ability of {% data variables.product.prodname_copilot_short %} to perform specialized tasks with instructions, scripts, and resources. For more information, see [AUTOTITLE](/copilot/concepts/agents/about-agent-skills).
 * **{% data variables.copilot.copilot_memory %}**: {% data variables.copilot.copilot_memory %} allows {% data variables.product.prodname_copilot_short %} to build a persistent understanding of your repository by storing "memories", which are pieces of information about coding conventions, patterns, and preferences that {% data variables.product.prodname_copilot_short %} deduces as it works. This reduces the need to repeatedly explain context in your prompts and makes future sessions more productive. For more information, see [AUTOTITLE](/copilot/concepts/agents/copilot-memory).
@@ -203,6 +203,10 @@ You can customize {% data variables.copilot.copilot_cli %} in a number of ways:
 When you use {% data variables.copilot.copilot_cli_short %}, {% data variables.product.prodname_copilot_short %} can perform tasks on your behalf, such as executing or modifying files, or running shell commands.
 
 You should therefore always keep security considerations in mind when using {% data variables.copilot.copilot_cli_short %}, just as you would when working directly with files yourself, or running commands directly in your terminal. You should always review suggested commands carefully when {% data variables.copilot.copilot_cli_short %} requests your approval.
+
+### Content exclusion
+
+For {% data variables.copilot.copilot_business_short %} and {% data variables.copilot.copilot_enterprise_short %} users, {% data variables.copilot.copilot_cli_short %} respects content exclusion policies configured at the enterprise, organization, and repository levels. Excluded files are not used as context. For more information, see [AUTOTITLE](/copilot/concepts/context/content-exclusion).
 
 ### Trusted directories
 
@@ -310,7 +314,7 @@ You can control which tools {% data variables.copilot.copilot_cli_short %} can u
 
 ### Risk mitigation
 
-You can mitigate the risks associated with using the automatic approval options by running {% data variables.copilot.copilot_cli_short %} in a sandboxed environment. {% data variables.copilot.sandbox_caps %} provides a first-party solution for this, with local sandboxing to restrict access on your machine and cloud sandboxing for fully isolated execution. For more information, see [AUTOTITLE](/copilot/concepts/about-cloud-and-local-sandboxes).
+You can mitigate the risks associated with using the automatic approval options by running {% data variables.copilot.copilot_cli_short %} in a sandboxed environment. {% data variables.product.github %} provides first-party sandboxing for this, with local sandboxing to restrict access on your machine and cloud sandboxing for fully isolated execution. For more information, see [AUTOTITLE](/copilot/concepts/about-cloud-and-local-sandboxes).
 
 Alternatively, you can run {% data variables.copilot.copilot_cli_short %} in a virtual machine, container, or dedicated system with tightly controlled permissions and network access.
 
@@ -321,7 +325,7 @@ Alternatively, you can run {% data variables.copilot.copilot_cli_short %} in a v
 * **MCP servers in {% data variables.product.prodname_copilot_short %}**, which controls whether MCP servers can be used at all by {% data variables.product.prodname_copilot_short %}.
 * **MCP Registry URL**, which controls which MCP registry {% data variables.product.prodname_copilot_short %} will allow MCP servers to be used from.
 
-For more information about these policies, see [AUTOTITLE](/copilot/concepts/mcp-management#mcp-policy-settings).
+For more information about these policies, see [AUTOTITLE](/copilot/concepts/mcp-management#mcp-allowlists).
 
 ## Model usage
 
@@ -364,6 +368,6 @@ For more information, see [AUTOTITLE](/copilot/reference/copilot-cli-reference/a
 
 ## Further reading
 
-* [AUTOTITLE](/copilot/how-tos/set-up/install-copilot-cli)
-* [AUTOTITLE](/copilot/how-tos/use-copilot-agents/use-copilot-cli)
-* [AUTOTITLE](/enterprise-cloud@latest/copilot/responsible-use/copilot-cli)
+* [AUTOTITLE](/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli)
+* [AUTOTITLE](/copilot/how-tos/copilot-cli/use-copilot-cli/overview)
+* [AUTOTITLE](/enterprise-cloud@latest/copilot/responsible-use/agents)
