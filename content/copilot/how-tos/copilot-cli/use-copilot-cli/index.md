@@ -14,9 +14,11 @@ children:
   - /delegate-tasks-to-cca
   - /browse-issues-prs-gists
   - /roll-back-changes
+  - /work-with-multiple-sessions
   - /invoke-custom-agents
   - /steer-agents
   - /steer-remotely
+  - /set-session-limit
   - /agentic-code-review
   - /manage-pull-requests
   - /speed-up-task-completion

@@ -34,8 +34,8 @@ The tutorial assumes you're comfortable working in a terminal and reading code i
 
 Before you start, make sure you have:
 
-* A {% data variables.product.prodname_copilot %} subscription. See [AUTOTITLE](/copilot/about-github-copilot/subscription-plans-for-github-copilot).
-* {% data variables.copilot.copilot_cli_short %} installed and authenticated. See [AUTOTITLE](/copilot/how-tos/copilot-cli/cli-getting-started).
+* A {% data variables.product.prodname_copilot %} subscription. See [AUTOTITLE](/copilot/get-started/plans).
+* {% data variables.copilot.copilot_cli_short %} installed and authenticated. See [AUTOTITLE](/copilot/get-started/cli-quickstart).
 * A local clone of the repository you want to explore. See [AUTOTITLE](/repositories/creating-and-managing-repositories/cloning-a-repository?tool=webui).
 
 ## 1. Start a session in the repository

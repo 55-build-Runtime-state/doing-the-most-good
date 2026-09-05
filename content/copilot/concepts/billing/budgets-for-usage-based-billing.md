@@ -29,6 +29,22 @@ There are three types, listed from the broadest scope to the most specific:
 
 When more than one type applies to a user, the most specific budget wins: an individual user-level budget takes precedence over a cost center user-level budget, which takes precedence over the universal user-level budget.
 
+#### Expiration dates for individual user-level budgets
+
+You can set an optional expiration date on an individual user-level budget, so a temporary override cleans itself up instead of requiring you to remember to remove it. This is useful when you raise a user's limit for a single sprint, an incident, or a short-term project.
+
+You can choose one of the following:
+
+* **No expiration**, which is the default and means the budget applies until you edit or delete it.
+* **Expiration at the end of the current billing cycle.**
+* **Expiration on a specific date.**
+
+At the end of the expiration period, {% data variables.product.github %} removes the individual budget. The user then falls back to their cost center user-level budget, if they have one, or otherwise to the universal user-level budget. If no broader budget applies, the user has no remaining user-level budget.
+
+You can change or clear an expiration date at any time. Expiration is only available for individual user-level budgets, not for universal or cost center user-level budgets.
+
+To set an expiration date, see [AUTOTITLE](/billing/how-tos/set-up-budgets#creating-a-budget). You can also set an expiration date with the REST API by using the `expires_at` field when creating or updating a budget. See [AUTOTITLE](/rest/billing/budgets).
+
 #### When users appear in a universal user-level budget
 
 A universal user-level budget can apply to thousands of licensed users. {% data variables.product.github %} creates each user's budget record the first time they consume {% data variables.product.prodname_ai_credits_short %} after the budget is created, or after the start of a new billing cycle. As a result, users appear in the universal budget list gradually rather than all at once, and a licensed user who does not use {% data variables.product.prodname_copilot_short %} in a given billing cycle will not appear in the list for that billing cycle.
@@ -46,6 +62,31 @@ When a cost center's budget is exhausted, only users in that cost center are blo
 > [!NOTE]
 > A cost center budget is different from a cost center user-level budget. A cost center budget caps the team's **total metered charges** after the pool is exhausted. A cost center user-level budget caps **each member's individual consumption** across both the pool and metered phases, the same way other user-level budgets do. You can apply both to the same cost center.
 
+### Included usage controls for cost centers
+
+{% data reusables.billing.included-usage-controls %}
+
+Unlike a cost center budget, which caps metered charges only after the shared pool of {% data variables.product.prodname_ai_credits_short %} is exhausted, an included usage control limits how much of the pool a cost center can draw **before** the metered phase begins. To enable it, see [AUTOTITLE](/billing/how-tos/set-up-budgets).
+
+Cost center administrators can view the included usage cap and current consumption on the cost center home page. When the included usage pool cap is enabled, the home page shows **AI credit pool enabled** and displays the {% data variables.product.prodname_ai_credits_short %} consumed in that cost center out of the total cap.
+
+#### How the included usage cap is calculated
+
+The cap is the sum of the included {% data variables.product.prodname_ai_credits_short %} for every license assigned to the cost center's members, even when license types are mixed:
+
+* Each {% data variables.copilot.copilot_business_short %} license adds {% data variables.copilot.ai_credits_per_user_business %} {% data variables.product.prodname_ai_credits_short %}.
+* Each {% data variables.copilot.copilot_enterprise_short %} license adds {% data variables.copilot.ai_credits_per_user_enterprise %} {% data variables.product.prodname_ai_credits_short %}.
+
+For example, at current included amounts, a cost center with 10 {% data variables.copilot.copilot_business_short %} licenses and 5 {% data variables.copilot.copilot_enterprise_short %} licenses has a cap of 38,500 {% data variables.product.prodname_ai_credits_short %}: 19,000 from the {% data variables.copilot.copilot_business_short %} licenses (10 × {% data variables.copilot.ai_credits_per_user_business %}) plus 19,500 from the {% data variables.copilot.copilot_enterprise_short %} licenses (5 × {% data variables.copilot.ai_credits_per_user_enterprise %}).
+
+The cap updates automatically if {% data variables.product.github %} changes the included amount for a license type. It's also recalculated as the cost center's own licenses change: increases apply right away, so a growing team isn't blocked, while decreases take effect at the start of the next billing cycle, so {% data variables.product.prodname_ai_credits_short %} that members have already used aren't clawed back mid-cycle.
+
+| Change | Effect on the cap | When it applies |
+| --- | --- | --- |
+| A licensed user is added or granted a license, or an existing license is upgraded (for example, {% data variables.copilot.copilot_business_short %} to {% data variables.copilot.copilot_enterprise_short %}) | Increases | Right away |
+| A licensed user is removed or loses their license, or an existing license is downgraded | Decreases | Start of the next billing cycle |
+| A licensed member moves between two cost centers that both use included usage controls | Recalculated for both cost centers | Start of the next billing cycle |
+| An unlicensed user is added or removed | No change | Not applicable |
 ### Organization budget
 
 An organization budget caps metered charges for users who receive their {% data variables.product.prodname_copilot_short %} license through that organization. Like cost center budgets, it is only active after the shared pool is exhausted.
@@ -80,6 +121,8 @@ When someone in your enterprise uses {% data variables.product.prodname_copilot_
 
 > [!NOTE]
 > For additional (metered) usage to occur, the "{% data variables.product.prodname_ai_credit_singular %} paid usage" policy must be enabled in your enterprise or organization settings. If this policy is disabled, usage is blocked when the shared pool is exhausted, regardless of your budget configuration.
+
+![Flowchart of AI credit budget checks: individual budget, then shared pool, then metered charge against the most specific budget.](/assets/images/help/billing/request-budget-flow.png)
 
 Each request for an {% data variables.product.prodname_ai_credit_singular %}-consuming feature goes through these checks:
 
