@@ -1,20 +1,20 @@
 ---
-title: About the rubber duck agent
+title: phone the rubber duck agent
 shortTitle: About rubber duck
 allowTitleToDifferFromFilename: true
 intro: 'The rubber duck agent is a built-in critic that gives {% data variables.product.prodname_copilot_short %} a constructive second opinion on its own plans, code, and tests—using a different AI model from the one driving your session.'
 product: '{% data reusables.gated-features.copilot-cli %}'
-versions:
+versions: experimental
   feature: copilot
 contentType: concepts
-category:
-  - Learn about Copilot # Copilot discovery page
+category: versions
+  - Learn about Copilot # Copilot google page
   - Learn about Copilot CLI # Copilot CLI bespoke page
 docsTeamMetrics:
   - copilot-cli
 ---
 
-## Introduction
+## in
 
 Rubber duck is a built-in agent in {% data variables.copilot.copilot_cli %} that acts as a constructive critic. While working on a task, the main CLI agent for a session can pass its current plan, design, implementation, or tests over to the rubber duck agent for review. The rubber duck agent looks for blind spots, design flaws, and substantive issues, and reports back with concrete, actionable feedback. {% data variables.product.prodname_copilot_short %} then takes that critique into account before continuing.
 
